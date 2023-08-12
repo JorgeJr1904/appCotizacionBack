@@ -39,11 +39,12 @@ create table usuario(
 
 create table cotizaciones(
     idCotizacion serial primary key,
-    idCliente int not null,
     idUsuario int not null,
     vNombreCliente varchar(30) not null,
     vApellidoCliente varchar(30) not null,
+    vTipoCliente varchar(30) not null,
     dFechaCotizacion timestamp default current_timestamp,
+    dPrecioTotal decimal(10,2) not null,
     constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario)
 );
 
@@ -54,7 +55,7 @@ create table pedido(
     dPrecioHora decimal(10, 2) not null,
     iHorasDia int not null,
     iDias int not null,
-    dPrecioTotal decimal(10, 2) not null,
+    dPrecioPedido decimal(10, 2) not null,
     idCotizacion int not null,
     constraint pedido_cotizacion foreign key (idCotizacion) references cotizaciones (idCotizacion)
 );

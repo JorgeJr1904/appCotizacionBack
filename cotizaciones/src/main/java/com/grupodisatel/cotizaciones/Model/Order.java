@@ -29,7 +29,7 @@ public class Order {
     @Getter @Setter @Column(name = "idias")
     private int days;
 
-    @Getter @Setter @Column(name = "dpreciototal")
+    @Getter @Setter @Column(name = "dpreciopedido")
     private BigDecimal totalPrice;
 
     @Getter @Setter @Column(name = "idcotizacion")
