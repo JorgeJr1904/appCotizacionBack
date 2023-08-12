@@ -62,12 +62,10 @@ iCantidadHombres int not null,
 dPrecioHora decimal(10, 2) not null,
 iHorasDia int not null,
 iDias int not null,
-iPrecioTotal decimal(10, 2) not null,
+dPrecioTotal decimal(10, 2) not null,
 idCotizacion int not null,
 constraint pedido_cotizacion foreign key (idCotizacion) references cotizaciones (idCotizacion)
 );
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-
 
