@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -27,4 +28,19 @@ public class Price {
 
     @Getter @Setter @Column(name = "dfechacotizacion")
     private Date priceDate;
+
+    @Getter @Setter @Column(name = "vtipocliente")
+    private String customerType;
+
+    @Getter @Setter @Column(name = "vnombrecliente")
+    private String Customername;
+
+    @Getter @Setter @Column(name = "vapellidocliente")
+    private String Customerlastname;
+
+    @Getter @Setter @Column(name = "vdescripcion")
+    private String Description;
+
+    @Getter @Setter @Column(name = "dPrecioTotal")
+    private BigDecimal totalPrice;
 }
