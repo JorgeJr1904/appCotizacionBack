@@ -48,11 +48,11 @@ constraint usuario_roles foreign key (idRol) references roles (idRol)
 
 create table cotizaciones(
 idCotizacion int primary key not null auto_increment,
-idDepartamento int not null,
-idDatosPersona int not null,
+idCliente int not null,
+idUsuario int not null,
 dFechaCotizacion datetime default CURRENT_TIMESTAMP,
-constraint departamento_cotizacion foreign key (idDepartamento) references departamento (idDepartamento),
-constraint persona_cotizacion foreign key (idDatosPersona) references usuario (idUsuario)
+constraint cliente_cotizacion foreign key (idCliente) references cliente (idCliente),
+constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario)
 );
 
 create table pedido(
