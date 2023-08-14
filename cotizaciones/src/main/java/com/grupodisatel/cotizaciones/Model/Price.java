@@ -20,9 +20,6 @@ public class Price {
     @Getter @Setter @Column(name = "idcotizacion")
     private int id;
 
-    @Getter @Setter @Column(name = "idcliente")
-    private int customer;
-
     @Getter @Setter @Column(name = "idusuario")
     private int user;
 
