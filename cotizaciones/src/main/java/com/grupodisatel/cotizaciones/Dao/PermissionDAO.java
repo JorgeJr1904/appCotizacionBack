@@ -17,7 +17,7 @@ public class PermissionDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     public List<Permission> getPermissions(){
         String query = "FROM Permission";
         return entityManager.createQuery(query).getResultList();
