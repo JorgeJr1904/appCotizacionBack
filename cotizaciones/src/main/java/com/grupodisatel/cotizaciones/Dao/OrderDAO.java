@@ -25,8 +25,9 @@ public class OrderDAO {
         return entityManager.find(Order.class, id);
     }
 
-    public boolean newOrder(Order order){
+    public boolean newOrder(Order order, int PriceId){
         order.setTotalPrice(totalPriceOrder(order));
+        order.setIdPrice(PriceId);
         order.setStatus('1');
         entityManager.persist(order);
         return true;

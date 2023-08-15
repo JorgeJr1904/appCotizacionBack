@@ -33,7 +33,7 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Getter @Setter @Column(name = "idcotizacion")
-    private int price;
+    private int idPrice;
 
     @Getter @Setter @Column(name = "cestado")
     private char status;
