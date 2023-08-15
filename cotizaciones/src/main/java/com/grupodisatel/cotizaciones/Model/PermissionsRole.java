@@ -20,4 +20,7 @@ public class PermissionsRole {
 
     @Getter @Setter @Column(name = "idpermiso")
     private int idPermission;
+
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
 }

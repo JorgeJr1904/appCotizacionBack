@@ -18,4 +18,7 @@ public class Permission {
 
     @Getter @Setter @Column(name = "vnombrepermiso")
     private String permissionName;
+
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
 }

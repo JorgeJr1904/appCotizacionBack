@@ -29,4 +29,7 @@ public class User {
     @Getter @Setter @Column(name = "idrol")
     private int idRole;
 
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
+
 }

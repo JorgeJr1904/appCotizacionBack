@@ -40,4 +40,7 @@ public class Price {
 
     @Getter @Setter @Column(name = "dPrecioTotal")
     private BigDecimal totalPrice;
+
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
 }

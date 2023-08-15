@@ -35,4 +35,7 @@ public class Order {
     @Getter @Setter @Column(name = "idcotizacion")
     private int price;
 
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
+
 }

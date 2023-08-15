@@ -22,4 +22,7 @@ public class Role {
     @Getter @Setter @Column(name = "vpalabraclave")
     private String keyWord;
 
+    @Getter @Setter @Column(name = "cestado")
+    private char status;
+
 }
