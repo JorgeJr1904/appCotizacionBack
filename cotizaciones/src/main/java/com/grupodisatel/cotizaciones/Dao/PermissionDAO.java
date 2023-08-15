@@ -18,7 +18,13 @@ public class PermissionDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+<<<<<<< Updated upstream
     public List<Permission> getPermissions(){
+=======
+    //This are RESTMethods
+
+    public List<Permission> permissionsName(){
+>>>>>>> Stashed changes
         String query = "FROM Permission";
         return entityManager.createQuery(query).getResultList();
     }
@@ -33,7 +39,11 @@ public class PermissionDAO {
 
     public boolean deletePermission(int id){
         try{
+<<<<<<< Updated upstream
             Permission permission = findPermission(id);
+=======
+            Permission permission = entityManager.find(Permission.class, id);
+>>>>>>> Stashed changes
             entityManager.remove(permission);
             return true;
         }catch (Exception e){
@@ -43,6 +53,7 @@ public class PermissionDAO {
 
     public boolean updatePermision(int id, Permission permission){
         try{
+<<<<<<< Updated upstream
             if (!existPermission(findPermission(id).getPermissionName())){
                 Permission permissionDB = findPermission(id);
                 permissionDB.setPermissionName(permission.getPermissionName());
@@ -53,21 +64,31 @@ public class PermissionDAO {
             return false;
         }
         return false;
+=======
+
+        }
+>>>>>>> Stashed changes
     }
 
 
     //This Methods will be used for RestMethods ------------------------------------------------------------------------------------------------
+<<<<<<< Updated upstream
 
     //This method find if the user try to create new permission name and it already exists
+=======
+>>>>>>> Stashed changes
     public boolean existPermission(String permissionName){
         String jpql = "SELECT e FROM Permission e WHERE e.permissionName = :name";
         Query query = entityManager.createQuery(jpql, Role.class);
         query.setParameter("name", permissionName);
         return query.getResultList().isEmpty();
     }
+<<<<<<< Updated upstream
 
     //this method only find the record in the db with the id
     public Permission findPermission(int id){
         return entityManager.find(Permission.class, id);
     }
+=======
+>>>>>>> Stashed changes
 }
