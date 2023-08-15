@@ -11,18 +11,21 @@ drop table if exists permisos;
 create table roles(
     idRol serial primary key,
     vNombreRol varchar(20),
-    vPalabraClave varchar(40)
+    vPalabraClave varchar(40),
+    cEstado char not null
 );
 
 create table permisos(
     idPermiso serial primary key,
-    vNombrePermiso varchar(20)
+    vNombrePermiso varchar(20),
+    cEstado char not null
 );
 
 create table roles_permisos(
     idRolPermiso serial primary key,
     idRol int not null,
     idPermiso int not null,
+    cEstado char not null,
     constraint roles_grupo foreign key (idRol) references roles (idRol),
     constraint permiso_grupo foreign key (idPermiso) references permisos (idPermiso)
 );
@@ -34,6 +37,7 @@ create table usuario(
     vApellido varchar(30) not null,
     vPassword varchar(100) not null,
     idRol int not null,
+    cEstado char not null,
     constraint usuario_roles foreign key (idRol) references roles (idRol)
 );
 
@@ -45,6 +49,7 @@ create table cotizaciones(
     vTipoCliente varchar(30) not null,
     dFechaCotizacion timestamp default current_timestamp,
     dPrecioTotal decimal(10,2) not null,
+    cEstado char not null,
     constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario)
 );
 
@@ -57,6 +62,8 @@ create table pedido(
     iDias int not null,
     dPrecioPedido decimal(10, 2) not null,
     idCotizacion int not null,
+    cEstado char not null,
     constraint pedido_cotizacion foreign key (idCotizacion) references cotizaciones (idCotizacion)
+    
 );
 
