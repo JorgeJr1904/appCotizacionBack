@@ -67,3 +67,14 @@ create table pedido(
     
 );
 
+--Functions
+
+CREATE OR REPLACE FUNCTION findUser(a varchar(20))
+RETURNS integer AS
+$$
+BEGIN
+    select count(*) from usuario where vNombreUsuario = a;
+END;
+$$ LANGUAGE plpgsql;
+
+
