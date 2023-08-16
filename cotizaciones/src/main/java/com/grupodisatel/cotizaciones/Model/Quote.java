@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "cotizacion")
 @EqualsAndHashCode @ToString
-public class Price {
+public class Quote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Price {
     private int user;
 
     @Getter @Setter @Column(name = "dfechacotizacion")
-    private Date priceDate;
+    private Date quoteDate;
 
     @Getter @Setter @Column(name = "vtipocliente")
     private String customerType;
