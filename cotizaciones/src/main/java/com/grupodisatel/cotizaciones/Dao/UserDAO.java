@@ -19,10 +19,11 @@ public class UserDAO {
     EntityManager entityManager;
 
     public boolean newUser(User user){
-            if (duplicateUser(user.getUserName()) > 0){
+            if (!duplicateUser(user.getUserName())){
                 return false;
             }else {
                 user.setPassword(encryptPass(user.getPassword()));
+                user.setStatus('1');
                 entityManager.persist(user);
                 return true;
             }
@@ -31,8 +32,12 @@ public class UserDAO {
     public boolean deleteUser(int id){
         try{
             User user = entityManager.find(User.class, id);
-            user.setStatus('0');
-            return true;
+            if (user.getStatus()== '1'){
+                user.setStatus('0');
+                return true;
+            }else {
+                return false;
+            }
         }catch (Exception e){
             return false;
         }
@@ -45,24 +50,23 @@ public class UserDAO {
             user1.setName(user.getName());
             user1.setLastname(user.getLastname());
             user1.setIdRole(user.getIdRole());
-            entityManager.merge(user1);
             return true;
         }catch (Exception e){
             return false;
         }
     }
-    public List<Quote> getUsers(){
+    public List<User> getUsers(){
 
         return entityManager.createQuery("FROM User").getResultList();
     }
 
     //Verification user duplicate
 
-    public int duplicateUser(String userName){
-        String sql= "select findUser(:a)";
-        Query query = entityManager.createNativeQuery(sql);
+    public boolean duplicateUser(String userName){
+        String sql= "SELECT e.userName FROM User e WHERE e.userName = :a";
+        Query query = entityManager.createQuery(sql);
         query.setParameter("a",userName);
-        return query.getFirstResult();
+        return query.getResultList().isEmpty();
     }
 
 
