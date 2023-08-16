@@ -1,7 +1,6 @@
 package com.grupodisatel.cotizaciones.Dao;
 
-import com.grupodisatel.cotizaciones.Model.Price;
-import com.grupodisatel.cotizaciones.Model.Role;
+import com.grupodisatel.cotizaciones.Model.Quote;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -13,11 +12,11 @@ import java.util.List;
 
 @Transactional
 @Repository
-public class PriceDAO {
+public class QuoteDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    public boolean newPrice(Price price){
+    public boolean newPrice(Quote price){
         try {
             entityManager.persist(price);
             return true;
@@ -28,30 +27,33 @@ public class PriceDAO {
 
     public boolean deletePrice(int id){
         try{
-            Price price = entityManager.find(Price.class, id);
-            price.setStatus('0');
+            Quote quote = entityManager.find(Quote.class, id);
+            quote.setStatus('0');
             return true;
         }catch (Exception e){
             return false;
         }
     }
 
-    public boolean updatePrice(int id){
+    public boolean updatePrice(Quote quote){
         try{
-            Price price = entityManager.find(Price.class, id);
-            price.setStatus('0');
+            Quote quote1 = entityManager.find(Quote.class, quote.getId());
+            quote1.setCustomername(quote.getCustomername());
+            quote1.setCustomerlastname(quote.getCustomername());
+            quote1.setCustomerType(quote.getCustomername());
+            entityManager.merge(quote1);
             return true;
         }catch (Exception e){
             return false;
         }
     }
-    public List<Price> getAdminPrice(){
+    public List<Quote> getAdminPrice(){
         return entityManager.createQuery("FROM Price").getResultList();
     }
 
-    public List<Price> getUserPrice(int id){
-        String jpql = "SELECT e FROM Price e WHERE e.user = :id";
-        Query query = entityManager.createQuery(jpql, Price.class);
+    public List<Quote> getUserPrice(int id){
+        String jpql = "SELECT e FROM Quote e WHERE e.user = :id";
+        Query query = entityManager.createQuery(jpql, Quote.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
