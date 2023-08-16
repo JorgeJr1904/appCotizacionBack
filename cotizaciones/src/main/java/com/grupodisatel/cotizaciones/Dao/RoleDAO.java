@@ -55,7 +55,6 @@ public class RoleDAO {
                 Role existingRole = existRole(id);
                 existingRole.setRoleName(role.getRoleName());
                 existingRole.setKeyWord(role.getKeyWord());
-                entityManager.merge(existingRole);
                 return true;
             }
 
