@@ -17,12 +17,13 @@ public class RoleDAO {
     private EntityManager entityManager;
 
     public List<Role> getRoles(){
-        String sql = "FROM Role";
+        String sql = "FROM Role WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
     }
 
     public boolean createRole(Role role){
             if (existRole(role.getRoleName(), role.getKeyWord())) {
+                role.setStatus('1');
                 entityManager.persist(role);
                 return true;
             }
