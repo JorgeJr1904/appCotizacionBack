@@ -14,7 +14,7 @@ public class Order {
     @Getter @Setter @Column(name = "idpedido")
     private int id;
 
-    @Getter @Setter @Column(name = "vDescripcion")
+    @Getter @Setter @Column(name = "vdescripcion")
     private String Description;
 
     @Getter @Setter @Column(name = "icantidadhombres")
@@ -33,7 +33,7 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Getter @Setter @Column(name = "idcotizacion")
-    private int idPrice;
+    private int idQuote;
 
     @Getter @Setter @Column(name = "cestado")
     private char status;
