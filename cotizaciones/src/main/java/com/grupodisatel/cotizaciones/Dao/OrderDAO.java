@@ -17,7 +17,7 @@ public class OrderDAO {
     private EntityManager entityManager;
 
     public List<Order> getAll(){
-        String sql= "FROM Order WHERE status = 1";
+        String sql= "FROM Order WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
     }
 
@@ -25,9 +25,8 @@ public class OrderDAO {
         return entityManager.find(Order.class, id);
     }
 
-    public boolean newOrder(Order order, int PriceId){
+    public boolean newOrder(Order order){
         order.setTotalPrice(totalPriceOrder(order));
-        order.setIdPrice(PriceId);
         order.setStatus('1');
         entityManager.persist(order);
         return true;
@@ -64,7 +63,7 @@ public class OrderDAO {
 
 
     public BigDecimal totalPriceOrder(Order order){
-        return BigDecimal.valueOf(order.getMen()).multiply(order.getHourPrice()).multiply(BigDecimal.valueOf(order.getHourDays()));
+        return BigDecimal.valueOf(order.getMen()).multiply(order.getHourPrice()).multiply(BigDecimal.valueOf(order.getHourDays()).multiply(BigDecimal.valueOf(order.getDays())));
     }
 
 }
