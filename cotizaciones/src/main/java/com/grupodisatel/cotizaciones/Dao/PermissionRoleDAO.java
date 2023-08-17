@@ -1,6 +1,5 @@
 package com.grupodisatel.cotizaciones.Dao;
 
-import com.grupodisatel.cotizaciones.Model.Order;
 import com.grupodisatel.cotizaciones.Model.PermissionsRole;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
