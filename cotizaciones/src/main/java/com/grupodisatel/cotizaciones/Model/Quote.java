@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "cotizacion")
+@Table(name = "cotizaciones")
 @EqualsAndHashCode @ToString
 public class Quote {
 
@@ -35,10 +35,7 @@ public class Quote {
     @Getter @Setter @Column(name = "vapellidocliente")
     private String Customerlastname;
 
-    @Getter @Setter @Column(name = "vdescripcion")
-    private String Description;
-
-    @Getter @Setter @Column(name = "dPrecioTotal")
+    @Getter @Setter @Column(name = "dpreciototal")
     private BigDecimal totalPrice;
 
     @Getter @Setter @Column(name = "cestado")
