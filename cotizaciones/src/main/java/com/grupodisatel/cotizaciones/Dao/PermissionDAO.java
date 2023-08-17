@@ -18,32 +18,38 @@ public class PermissionDAO {
 
 
     public List<Permission> getPermissions(){
-        String query = "FROM Permission";
+        String query = "FROM Permission WHERE status = '1'";
         return entityManager.createQuery(query).getResultList();
     }
 
     public boolean createPermission(Permission permission){
-        if (existPermission(permission.getPermissionName())){
-            entityManager.persist(permission);
-            return true;
+        try{
+            if (existPermission(permission.getPermissionName())){
+                entityManager.persist(permission);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }catch (Exception e){
+            return false;
         }
-        return false;
     }
 
     public boolean deletePermission(int id){
         try{
             Permission permission = findPermission(id);
-            entityManager.remove(permission);
+            permission.setStatus('0');
             return true;
         }catch (Exception e){
             return false;
         }
     }
 
-    public boolean updatePermision(int id, Permission permission){
+    public boolean updatePermision(Permission permission){
         try{
-            if (!existPermission(findPermission(id).getPermissionName())){
-                Permission permissionDB = findPermission(id);
+            if (!existPermission(findPermission(permission.getIdPermission()).getPermissionName())){
+                Permission permissionDB = findPermission(permission.getIdPermission());
                 permissionDB.setPermissionName(permission.getPermissionName());
                 entityManager.merge(permissionDB);
                 return true;
