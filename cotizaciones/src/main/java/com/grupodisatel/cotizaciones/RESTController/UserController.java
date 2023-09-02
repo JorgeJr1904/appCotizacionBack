@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/user")
@@ -15,7 +16,7 @@ public class UserController {
     private UserDAO userDAO;
 
     @RequestMapping(value = "new", method = RequestMethod.POST)
-    public boolean newUser(@RequestBody User user){
+    public String newUser(@RequestBody User user){
         return userDAO.newUser(user);
     }
 
@@ -29,9 +30,19 @@ public class UserController {
         return userDAO.updateUser(user);
     }
 
+    @RequestMapping(value = "enable-desable/{id}", method = RequestMethod.PATCH)
+    public String enableDisableUser(@PathVariable int id){
+        return userDAO.d_activateUser(id);
+    }
+
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public List<User> getUser(){
         return userDAO.getUsers();
+    }
+
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+    public User getOnlyUser(@PathVariable int id){
+        return userDAO.getOnlyUser(id);
     }
 
 }
