@@ -11,7 +11,6 @@ drop table if exists permisos;
 create table roles(
     idRol serial primary key,
     vNombreRol varchar(20),
-    vPalabraClave varchar(40),
     cEstado char not null
 );
 
@@ -33,8 +32,8 @@ create table roles_permisos(
 create table usuario(
     idUsuario serial primary key,
     vNombreUsuario varchar(20) not null,
-    vNombre varchar(30) not null,
-    vApellido varchar(30) not null,
+    vNombre varchar(60) not null,
+    vApellido varchar(60) not null,
     vPassword varchar(100) not null,
     idRol int not null,
     cEstado char not null,
