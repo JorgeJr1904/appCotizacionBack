@@ -34,4 +34,12 @@ public class User {
     @Getter @Setter @Column(name = "cestado")
     private char status;
 
+    public User(String userName, int idRole){
+        this.userName = userName;
+        this.idRole = idRole;
+    }
+
+    public User(){
+    }
+
 }
