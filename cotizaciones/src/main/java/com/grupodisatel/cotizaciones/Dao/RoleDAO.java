@@ -16,13 +16,14 @@ public class RoleDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // CRUD -------------------------------------------------------------------------------------------------------------
     public List<Role> getRoles(){
         String sql = "FROM Role WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
     }
 
     public boolean createRole(Role role){
-            if (existRole(role.getRoleName(), role.getKeyWord())) {
+            if (existRole(role.getRoleName())) {
                 role.setStatus('1');
                 entityManager.persist(role);
                 return true;
@@ -49,13 +50,12 @@ public class RoleDAO {
             if (existRole(id) == null){
                 return false;
             }
-            if (!CoincidenceRoles(id, role.getRoleName(), role.getKeyWord())){
+            if (!CoincidenceRoles(id, role.getRoleName())){
                 return false;
             }
             else {
                 Role existingRole = existRole(id);
                 existingRole.setRoleName(role.getRoleName());
-                existingRole.setKeyWord(role.getKeyWord());
                 return true;
             }
 
@@ -64,29 +64,28 @@ public class RoleDAO {
         }
 
     }
+    //Finish CRUD ------------------------------------------------------------------------------------------------------
 
     public Role existRole(int id){
         return entityManager.find(Role.class, id);
     }
 
-    public boolean existRole(String role, String key){
-        String jpql = "SELECT e FROM Role e WHERE e.roleName = :rolName OR e.keyWord = :keyWord";
+    public boolean existRole(String role){
+        String jpql = "SELECT e FROM Role e WHERE e.roleName = :rolName";
         Query query = entityManager.createQuery(jpql, Role.class);
         query.setParameter("rolName", role);
-        query.setParameter("keyWord", key);
         return query.getResultList().isEmpty();
     }
 
-    public List<Integer> existingRoles(String role, String key){
-        String jpql = "SELECT e.idRole FROM Role e WHERE e.roleName = :rolName OR e.keyWord = :keyWord";
+    public List<Integer> existingRoles(String role){
+        String jpql = "SELECT e.idRole FROM Role e WHERE e.roleName = :rolName";
         Query query = entityManager.createQuery(jpql, Role.class);
         query.setParameter("rolName", role);
-        query.setParameter("keyWord", key);
         return query.getResultList();
     }
 
-    public boolean CoincidenceRoles(Integer id, String role, String key){
-        List<Integer> idRole = existingRoles(role, key);
+    public boolean CoincidenceRoles(Integer id, String role){
+        List<Integer> idRole = existingRoles(role);
         int listSize = idRole.size();
         for (int idrole : idRole){
             if (idrole == id){

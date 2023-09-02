@@ -19,6 +19,11 @@ public class RoleController {
         return roleDAO.getRoles();
     }
 
+    @RequestMapping(value = "getRoleName/{id}", method = RequestMethod.GET)
+    public Role getRoleName(@PathVariable int id){
+        return roleDAO.existRole(id);
+    }
+
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public boolean newRole(@RequestBody Role role){
         return roleDAO.createRole(role);
