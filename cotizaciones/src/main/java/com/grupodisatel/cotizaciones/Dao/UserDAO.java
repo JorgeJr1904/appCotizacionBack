@@ -10,6 +10,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Transactional
 @Repository
@@ -18,29 +21,28 @@ public class UserDAO {
     @PersistenceContext
     EntityManager entityManager;
 
-    public boolean newUser(User user){
+    //Starts CRUD ------------------------------------------------------------------------------------------------------
+    public String newUser(User user){
             if (!duplicateUser(user.getUserName())){
-                return false;
-            }else {
+                return "user already exists";
+            } else if (!securePass(user.getPassword())) {
+                return "not secure password";
+            } else {
                 user.setPassword(encryptPass(user.getPassword()));
                 user.setStatus('1');
                 entityManager.persist(user);
-                return true;
+                return "true";
             }
     }
 
     public boolean deleteUser(int id){
         try{
             User user = entityManager.find(User.class, id);
-            if (user.getStatus()== '1'){
-                user.setStatus('0');
-                return true;
-            }else {
-                return false;
-            }
+            entityManager.remove(user);
         }catch (Exception e){
             return false;
         }
+            return false;
     }
 
     public boolean updateUser(User user){
@@ -57,7 +59,43 @@ public class UserDAO {
     }
     public List<User> getUsers(){
 
-        return entityManager.createQuery("FROM User").getResultList();
+        return entityManager.createQuery("SELECT e FROM User e ORDER BY e.id").getResultList();
+    }
+
+    public User getOnlyUser(int id){
+        Query query = entityManager.createQuery("SELECT e FROM User e WHERE id = :id");
+        query.setParameter("id", id);
+        User user = (User) query.getSingleResult();
+        user.setPassword("");
+        return user;
+    }
+
+    //Finish CRUD ------------------------------------------------------------------------------------------------------
+
+    public Object findRoleUser(Object username){
+        System.out.println(username);
+        String jpql = "SELECT e.idRole FROM User e WHERE userName = :username";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("username", username);
+        return query.getSingleResult();
+    }
+
+    //this method enable or disable the user account
+    public String d_activateUser(int id){
+        try{
+            User user = entityManager.find(User.class, id);
+            if (user.getStatus()== '1'){
+                user.setStatus('0');
+                return "user disable";
+            }if (user.getStatus()== '0') {
+                user.setStatus('1');
+                return "user enable";
+            }else {
+                return "false";
+            }
+        }catch (Exception e){
+            return "error";
+        }
     }
 
     //Verification user duplicate
@@ -67,6 +105,16 @@ public class UserDAO {
         Query query = entityManager.createQuery(sql);
         query.setParameter("a",userName);
         return query.getResultList().isEmpty();
+    }
+
+    //Verification requisits of security password
+    public static boolean securePass(String pass){
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_ -])[A-Za-z\\d@$!%*?&_ -]{8,}$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(pass);
+        
+        return matcher.matches();
     }
 
 
