@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/quote")
+@RequestMapping("api/quote/v1")
 public class QuoteController {
 
     @Autowired
     private QuoteDAO quoteDAO;
 
     @RequestMapping(value = "new", method = RequestMethod.POST)
-    public boolean newQuote(@RequestBody Quote quote){
+    public Quote newQuote(@RequestBody Quote quote){
         return quoteDAO.newQuote(quote);
     }
 

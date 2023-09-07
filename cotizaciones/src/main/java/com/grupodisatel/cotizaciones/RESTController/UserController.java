@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("api/user")
@@ -25,9 +24,9 @@ public class UserController {
         return userDAO.deleteUser(id);
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public boolean updateUser(@RequestBody User user){
-        return userDAO.updateUser(user);
+    @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
+    public String updateUser(@PathVariable int id,@RequestBody User user){
+        return userDAO.updateUser(id, user);
     }
 
     @RequestMapping(value = "enable-desable/{id}", method = RequestMethod.PATCH)
@@ -43,6 +42,12 @@ public class UserController {
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public User getOnlyUser(@PathVariable int id){
         return userDAO.getOnlyUser(id);
+    }
+
+    @PatchMapping(value = "update/password/{id}")
+    public boolean updatePasswordAdmin(@PathVariable int id, @RequestBody User password){
+        System.out.println(password);
+        return userDAO.updatePasswordAdmin(id, password.getPassword());
     }
 
 }

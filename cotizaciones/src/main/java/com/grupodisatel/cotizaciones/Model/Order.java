@@ -15,7 +15,7 @@ public class Order {
     private int id;
 
     @Getter @Setter @Column(name = "vdescripcion")
-    private String Description;
+    private String description;
 
     @Getter @Setter @Column(name = "icantidadhombres")
     private int men;

@@ -15,12 +15,16 @@ public class QuoteDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    public boolean newQuote(Quote quote){
+    public Quote newQuote(Quote quote){
+        //Quote quote1 = new Quote(quote.getUser(), quote.getCustomerType(), quote.getCustomerName(), quote.getCustomerLastname(), quote.getTotalPrice(), '1');
         try {
+            quote.setUser(1);
+            quote.setStatus('1');
             entityManager.persist(quote);
-            return true;
+            return quote;
         }catch (Exception ex){
-            return false;
+            ex.printStackTrace();
+            return null;
         }
     }
 
@@ -41,8 +45,8 @@ public class QuoteDAO {
     public boolean updateQuote(Quote quote){
         try{
             Quote quote1 = entityManager.find(Quote.class, quote.getId());
-            quote1.setCustomername(quote.getCustomername());
-            quote1.setCustomerlastname(quote.getCustomerlastname());
+            quote1.setCustomerName(quote.getCustomerName());
+            quote1.setCustomerLastname(quote.getCustomerLastname());
             quote1.setCustomerType(quote.getCustomerType());
             return true;
         }catch (Exception e){

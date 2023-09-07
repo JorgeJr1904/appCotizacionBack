@@ -4,6 +4,7 @@ import com.grupodisatel.cotizaciones.Model.Order;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -16,6 +17,9 @@ public class OrderDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private QuoteDAO quoteDAO;
+
     public List<Order> getAll(){
         String sql= "FROM Order WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
@@ -26,10 +30,15 @@ public class OrderDAO {
     }
 
     public boolean newOrder(Order order){
-        order.setTotalPrice(totalPriceOrder(order));
-        order.setStatus('1');
-        entityManager.persist(order);
-        return true;
+        try{
+            order.setStatus('1');
+            entityManager.persist(order);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            quoteDAO.deleteQuote(order.getIdQuote());
+            return false;
+        }
     }
 
     public boolean updateOrder(Order order){

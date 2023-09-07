@@ -1,6 +1,5 @@
 package com.grupodisatel.cotizaciones.Model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

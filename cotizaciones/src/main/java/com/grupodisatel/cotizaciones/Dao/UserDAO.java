@@ -1,6 +1,5 @@
 package com.grupodisatel.cotizaciones.Dao;
 
-import com.grupodisatel.cotizaciones.Model.Quote;
 import com.grupodisatel.cotizaciones.Model.User;
 import jakarta.persistence.Query;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -45,16 +44,29 @@ public class UserDAO {
             return false;
     }
 
-    public boolean updateUser(User user){
+    public String updateUser(int id, User user){
         try{
-            User user1 = entityManager.find(User.class, user.getId());
-            user1.setUserName(user.getUserName());
-            user1.setName(user.getName());
-            user1.setLastname(user.getLastname());
-            user1.setIdRole(user.getIdRole());
-            return true;
+            User user1 = entityManager.find(User.class, id);
+            if (!Objects.equals(user.getUserName(), user1.getUserName())){
+                if (!duplicateUser(user.getUserName())){
+                    return "user already exists";
+                }else {
+                    user1.setUserName(user.getUserName());
+                    user1.setName(user.getName());
+                    user1.setLastname(user.getLastname());
+                    user1.setIdRole(user.getIdRole());
+                    return "true";
+                }
+            }else {
+                user1.setUserName(user.getUserName());
+                user1.setName(user.getName());
+                user1.setLastname(user.getLastname());
+                user1.setIdRole(user.getIdRole());
+                return "true";
+            }
+
         }catch (Exception e){
-            return false;
+            return "false";
         }
     }
     public List<User> getUsers(){
@@ -63,22 +75,24 @@ public class UserDAO {
     }
 
     public User getOnlyUser(int id){
-        Query query = entityManager.createQuery("SELECT e FROM User e WHERE id = :id");
+        Query query = entityManager.createQuery("SELECT e.name, e.lastname, e.userName, e.idRole FROM User e WHERE e.id = :id");
         query.setParameter("id", id);
-        User user = (User) query.getSingleResult();
-        user.setPassword("");
-        return user;
+        Object[] userData = (Object[]) query.getSingleResult();
+        return new User(userData[0].toString(), userData[1].toString(), userData[2].toString(), (Integer) userData[3]);
+    }
+
+    public boolean updatePasswordAdmin(int id, String password){
+        try {
+            User user = entityManager.find(User.class, id);
+            user.setPassword(encryptPass(password));
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //Finish CRUD ------------------------------------------------------------------------------------------------------
-
-    public Object findRoleUser(Object username){
-        System.out.println(username);
-        String jpql = "SELECT e.idRole FROM User e WHERE userName = :username";
-        Query query = entityManager.createQuery(jpql);
-        query.setParameter("username", username);
-        return query.getSingleResult();
-    }
 
     //this method enable or disable the user account
     public String d_activateUser(int id){
@@ -123,10 +137,6 @@ public class UserDAO {
     //encryption and password verification------------------------------------------------------------------------------------------------------------------
     public String encryptPass(String pass){
         return BCrypt.hashpw(pass, BCrypt.gensalt());
-    }
-
-    public boolean passMatch(String pass, String hashPass){
-        return BCrypt.checkpw(pass, hashPass);
     }
 
 }

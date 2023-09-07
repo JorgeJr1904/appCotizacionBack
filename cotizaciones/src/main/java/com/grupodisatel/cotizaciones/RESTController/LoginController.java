@@ -3,7 +3,6 @@ package com.grupodisatel.cotizaciones.RESTController;
 import com.grupodisatel.cotizaciones.Dao.LoginDAO;
 import com.grupodisatel.cotizaciones.Model.Login;
 import com.grupodisatel.cotizaciones.Model.User;
-import com.grupodisatel.cotizaciones.Utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

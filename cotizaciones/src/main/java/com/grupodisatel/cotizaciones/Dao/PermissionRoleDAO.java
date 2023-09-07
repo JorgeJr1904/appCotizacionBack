@@ -1,10 +1,14 @@
 package com.grupodisatel.cotizaciones.Dao;
 
+import com.grupodisatel.cotizaciones.DTO.PermissionsRoleDTO;
+import com.grupodisatel.cotizaciones.Model.Permission;
 import com.grupodisatel.cotizaciones.Model.PermissionsRole;
+import com.grupodisatel.cotizaciones.Model.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,22 +20,53 @@ public class PermissionRoleDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private RoleDAO roleDAO;
+
     public List<PermissionsRole> getAll(){
         String sql= "FROM PermissionsRole WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
     }
 
-    public PermissionsRole getPermissionRole(int id){
-        return entityManager.find(PermissionsRole.class, id);
+    public PermissionsRoleDTO getPermissionRole(int idRole){
+        int count = 0;
+        List<PermissionsRole> permissionsRoles = getPermissionsRole(idRole);
+        PermissionsRoleDTO permissionsRoleDTO = new PermissionsRoleDTO();
+        int[] idPermissions = new int[permissionsRoles.size()];
+        for (PermissionsRole permissionRole:permissionsRoles) {
+            idPermissions[count] = permissionRole.getIdPermission();
+            count++;
+        }
+        permissionsRoleDTO.setIdPermission(idPermissions);
+        return permissionsRoleDTO;
     }
 
-    public boolean newPermissionsRole(PermissionsRole permissionsRole){
-        if (duplicatePermissionRole(permissionsRole.getIdRole(), permissionsRole.getIdPermission()) == 0){
-            permissionsRole.setStatus('1');
-            entityManager.persist(permissionsRole);
-            return true;
+    public String newPermissionsRole(PermissionsRoleDTO permissionsRoleDTO){
+        Role role = new Role();
+        role.setRoleName(permissionsRoleDTO.getRoleName());
+        if (roleDAO.existRole(role.getRoleName())){
+            try{
+                int[] idPermission = permissionsRoleDTO.getIdPermission();
+                int idRole = roleDAO.createRole(role);
+                if (idPermission.length > 0){
+                    for (int j : idPermission) {
+                        PermissionsRole permissionRole = new PermissionsRole();
+                        permissionRole.setIdRole(idRole);
+                        permissionRole.setIdPermission(j);
+                        permissionRole.setStatus('1');
+                        entityManager.persist(permissionRole);
+                    }
+                    return "true";
+                }else {
+                    return "null Permissions";
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+                return "false";
+            }
         }else {
-            return false;
+            return "Existent Role";
         }
     }
 
@@ -70,5 +105,12 @@ public class PermissionRoleDAO {
         query.setParameter("permission", idPermission);
         long count = (long) query.getSingleResult();
         return (int) count;
+    }
+
+    public List<PermissionsRole> getPermissionsRole(int idRole){
+        String jpql = "FROM PermissionsRole WHERE idRole = :role";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("role", idRole);
+        return query.getResultList();
     }
 }

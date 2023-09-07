@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/order")
+@RequestMapping("api/order/v1")
 public class OrderController {
 
     @Autowired
     private OrderDAO orderDAO;
 
-    @RequestMapping(value = "new", method = RequestMethod.POST)
+    @PostMapping(value = "new")
     public boolean newOrder(@RequestBody Order order){
+        System.out.println(order.getDescription());
         return orderDAO.newOrder(order);
     }
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)

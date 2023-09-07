@@ -7,6 +7,8 @@ drop table if exists roles;
 drop table if exists permisos;
 
 
+
+
 -- Creación de las tablas
 create table roles(
     idRol serial primary key,
@@ -16,7 +18,7 @@ create table roles(
 
 create table permisos(
     idPermiso serial primary key,
-    vNombrePermiso varchar(20),
+    vNombrePermiso varchar(40),
     cEstado char not null
 );
 
@@ -25,8 +27,8 @@ create table roles_permisos(
     idRol int not null,
     idPermiso int not null,
     cEstado char not null,
-    constraint roles_grupo foreign key (idRol) references roles (idRol),
-    constraint permiso_grupo foreign key (idPermiso) references permisos (idPermiso)
+    constraint roles_grupo foreign key (idRol) references roles (idRol) on delete CASCADE,
+    constraint permiso_grupo foreign key (idPermiso) references permisos (idPermiso) on delete CASCADE
 );
 
 create table usuario(
@@ -37,7 +39,7 @@ create table usuario(
     vPassword varchar(100) not null,
     idRol int not null,
     cEstado char not null,
-    constraint usuario_roles foreign key (idRol) references roles (idRol)
+    constraint usuario_roles foreign key (idRol) references roles (idRol) on delete set null
 );
 
 create table cotizaciones(
@@ -46,7 +48,7 @@ create table cotizaciones(
     vNombreCliente varchar(30) not null,
     vApellidoCliente varchar(30) not null,
     vTipoCliente varchar(30) not null,
-    dFechaCotizacion timestamp default current_timestamp,
+    dFechaCotizacion timestamp default current_timestamp not null,
     dPrecioTotal decimal(10,2) not null,
     cEstado char not null,
     constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario)
@@ -62,7 +64,7 @@ create table pedido(
     dPrecioPedido decimal(10, 2) not null,
     idCotizacion int not null,
     cEstado char not null,
-    constraint pedido_cotizacion foreign key (idCotizacion) references cotizaciones (idCotizacion)
+    constraint pedido_cotizacion foreign key (idCotizacion) references cotizaciones (idCotizacion) on delete CASCADE
     
 );
 
@@ -75,5 +77,8 @@ BEGIN
     select count(*) from usuario where vNombreUsuario = a;
 END;
 $$ LANGUAGE plpgsql;
+
+
+SHOW TIME ZONE;
 
 

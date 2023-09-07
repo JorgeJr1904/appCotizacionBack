@@ -22,13 +22,13 @@ public class RoleDAO {
         return entityManager.createQuery(sql).getResultList();
     }
 
-    public boolean createRole(Role role){
+    public int createRole(Role role){
             if (existRole(role.getRoleName())) {
                 role.setStatus('1');
                 entityManager.persist(role);
-                return true;
+                return role.getIdRole();
             }
-        return false;
+        return 0;
     }
 
     public boolean deleteRole(int id){
@@ -36,7 +36,8 @@ public class RoleDAO {
             if (existRole(id) == null){
                 return false;
             }else {
-                entityManager.remove(existRole(id));
+                Role role = entityManager.find(Role.class, id);
+                role.setStatus('0');
                 return true;
             }
 

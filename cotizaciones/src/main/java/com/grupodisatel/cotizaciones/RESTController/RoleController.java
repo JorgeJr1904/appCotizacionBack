@@ -24,11 +24,6 @@ public class RoleController {
         return roleDAO.existRole(id);
     }
 
-    @RequestMapping(value = "new", method = RequestMethod.POST)
-    public boolean newRole(@RequestBody Role role){
-        return roleDAO.createRole(role);
-    }
-
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public boolean deleteRole(@PathVariable int id){
         return roleDAO.deleteRole(id);
