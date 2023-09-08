@@ -96,4 +96,13 @@ public class JWTUtil {
 
         return claims.getId();
     }
+
+    public int getRole(String jwt) {
+        // This line will throw an exception if it is not a signed JWS (as
+        // expected)
+        Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(key))
+                .parseClaimsJws(jwt).getBody();
+
+        return (int) claims.get("idRole");
+    }
 }

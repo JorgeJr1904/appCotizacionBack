@@ -68,17 +68,15 @@ create table pedido(
     
 );
 
---Functions
-
-CREATE OR REPLACE FUNCTION findUser(a varchar(20))
-RETURNS integer AS
-$$
-BEGIN
-    select count(*) from usuario where vNombreUsuario = a;
-END;
-$$ LANGUAGE plpgsql;
-
-
-SHOW TIME ZONE;
+--Views
+--CREATE TEMP VIEW vista_roles_permisos AS
+SELECT rp.idRolPermiso, r.idrol, r.vNombreRol, p.vNombrePermiso
+FROM roles_permisos rp
+inner join roles r 
+on rp.idrol = r.idrol
+inner join permisos p
+on rp.idpermiso = p.idpermiso
+where r.idrol = 1
+order by r.idrol asc;
 
 

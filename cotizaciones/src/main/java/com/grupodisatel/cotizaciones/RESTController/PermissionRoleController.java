@@ -4,6 +4,7 @@ import com.grupodisatel.cotizaciones.DTO.PermissionsRoleDTO;
 import com.grupodisatel.cotizaciones.Dao.PermissionRoleDAO;
 import com.grupodisatel.cotizaciones.Model.Permission;
 import com.grupodisatel.cotizaciones.Model.PermissionsRole;
+import com.grupodisatel.cotizaciones.Utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,9 @@ public class PermissionRoleController {
 
     @Autowired
     private PermissionRoleDAO permissionsRoleDAO;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @PostMapping(value = "new")
     public String newPermissionRole(@RequestBody PermissionsRoleDTO permissionsRoleDTO){
@@ -31,8 +35,14 @@ public class PermissionRoleController {
     }
 
     @RequestMapping(value = "get/{idRole}", method = RequestMethod.GET)
-    public PermissionsRoleDTO getPermissionRole(@PathVariable int idRole){
-        return permissionsRoleDAO.getPermissionRole(idRole);
+    public PermissionsRoleDTO getPermissionRole(@PathVariable int idRole, @RequestHeader(value = "Authorization") String token){
+        int idRoleT = jwtUtil.getRole(token);
+        if (idRoleT == idRole){
+            return permissionsRoleDAO.getPermissionRole(idRoleT);
+        }else {
+            return null;
+        }
+
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)

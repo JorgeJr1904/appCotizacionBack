@@ -1,9 +1,13 @@
 package com.grupodisatel.cotizaciones.Dao;
 
+import com.grupodisatel.cotizaciones.DTO.PermissionsRoleDTO;
 import com.grupodisatel.cotizaciones.Model.Quote;
+import com.grupodisatel.cotizaciones.Utils.JWTUtil;
+import com.grupodisatel.cotizaciones.Validation.UserRoleValidation;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import jakarta.transaction.Transactional;
 
@@ -15,17 +19,26 @@ public class QuoteDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    public Quote newQuote(Quote quote){
-        //Quote quote1 = new Quote(quote.getUser(), quote.getCustomerType(), quote.getCustomerName(), quote.getCustomerLastname(), quote.getTotalPrice(), '1');
-        try {
-            quote.setUser(1);
-            quote.setStatus('1');
-            entityManager.persist(quote);
-            return quote;
-        }catch (Exception ex){
-            ex.printStackTrace();
-            return null;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+
+    @Autowired
+    private UserRoleValidation userRoleValidation;
+    public Quote newQuote(Quote quote, String token){
+        String userId = jwtUtil.getKey(token);
+        if (userRoleValidation.validatePermission(token, 1)){
+            try {
+                quote.setUser(Integer.parseInt(userId));
+                quote.setStatus('1');
+                entityManager.persist(quote);
+                return quote;
+            }catch (Exception ex){
+                ex.printStackTrace();
+                return null;
+            }
         }
+        return null;
     }
 
     public boolean deleteQuote(int id){
@@ -58,7 +71,7 @@ public class QuoteDAO {
     }
 
     public List<Quote> getUserQuote(int idUser){
-        String jpql = "SELECT e FROM Quote e WHERE e.user = :id AND e.status = '1'";
+        String jpql = "SELECT e FROM Quote e WHERE e.user = :id AND e.status = '1' ORDER BY quoteDate DESC";
         Query query = entityManager.createQuery(jpql, Quote.class);
         query.setParameter("id", idUser);
         return query.getResultList();
