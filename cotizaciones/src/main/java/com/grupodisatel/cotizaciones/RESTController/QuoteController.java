@@ -23,22 +23,22 @@ public class QuoteController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @RequestMapping(value = "new", method = RequestMethod.POST)
+    @PostMapping(value = "new")
     public Quote newQuote(@RequestBody Quote quote, @RequestHeader(value = "Authorization") String token){
         return quoteDAO.newQuote(quote, token);
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/{id}")
     public boolean deleteQuote(@PathVariable int id){
         return quoteDAO.deleteQuote(id);
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    @PutMapping(value = "update")
     public boolean updateQuote(@RequestBody Quote quote){
         return quoteDAO.updateQuote(quote);
     }
 
-    @RequestMapping(value = "get", method = RequestMethod.GET)
+    @GetMapping(value = "get")
     public List<Quote> getQuote(@RequestHeader(value = "Authorization") String token){
         if (userRoleValidation.validatePermission(token, 2)){
             int id = Integer.parseInt(jwtUtil.getKey(token));
@@ -47,8 +47,12 @@ public class QuoteController {
         return null;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Quote> getUser(){
-        return quoteDAO.getAdminQuote();
+    @GetMapping(value = "get/{id}")
+    public Quote getQuote(@PathVariable int id, @RequestHeader(value = "Authorization") String token){
+        if (userRoleValidation.validatePermission(token, 2)){
+            return quoteDAO.getQuote(id);
+        }
+        return null;
+
     }
 }

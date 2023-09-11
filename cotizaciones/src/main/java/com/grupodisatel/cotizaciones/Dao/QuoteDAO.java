@@ -76,4 +76,11 @@ public class QuoteDAO {
         query.setParameter("id", idUser);
         return query.getResultList();
     }
+
+    public Quote getQuote(int id){
+        String jpql = "SELECT e FROM Quote e WHERE e.id = :id";
+        Query query = entityManager.createQuery(jpql, Quote.class);
+        query.setParameter("id", id);
+        return (Quote) query.getSingleResult();
+    }
 }

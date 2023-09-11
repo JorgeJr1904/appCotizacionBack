@@ -84,8 +84,13 @@ public class UserDAO {
     public boolean updatePasswordAdmin(int id, String password){
         try {
             User user = entityManager.find(User.class, id);
-            user.setPassword(encryptPass(password));
-            return true;
+            if (!securePass(user.getPassword())){
+                return false;
+            }
+            else {
+                user.setPassword(encryptPass(password));
+                return true;
+            }
         }catch (Exception e){
             e.printStackTrace();
             return false;

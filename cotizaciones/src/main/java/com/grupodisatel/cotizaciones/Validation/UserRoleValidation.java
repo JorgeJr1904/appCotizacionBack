@@ -26,4 +26,8 @@ public class UserRoleValidation {
         }
         return false;
     }
+
+    public int idUser(String token){
+        return Integer.parseInt(jwtUtil.getKey(token));
+    }
 }

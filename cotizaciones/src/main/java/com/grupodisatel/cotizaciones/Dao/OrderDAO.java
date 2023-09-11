@@ -3,6 +3,7 @@ package com.grupodisatel.cotizaciones.Dao;
 import com.grupodisatel.cotizaciones.Model.Order;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,10 +24,6 @@ public class OrderDAO {
     public List<Order> getAll(){
         String sql= "FROM Order WHERE status = '1'";
         return entityManager.createQuery(sql).getResultList();
-    }
-
-    public Order getOrder(int id){
-        return entityManager.find(Order.class, id);
     }
 
     public boolean newOrder(Order order){
@@ -68,6 +65,13 @@ public class OrderDAO {
             entityManager.merge(order1);
             return true;
         }
+    }
+
+    public List<Order> getQuoteOrders(int id){
+        String sql= "FROM Order WHERE status = '1' AND idQuote = :id";
+        Query query = entityManager.createQuery(sql);
+        query.setParameter("id", id);
+        return query.getResultList();
     }
 
 
