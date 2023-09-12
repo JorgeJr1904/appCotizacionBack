@@ -21,7 +21,6 @@ public class OrderController {
 
     @PostMapping(value = "new")
     public boolean newOrder(@RequestBody Order order){
-        System.out.println(order.getDescription());
         return orderDAO.newOrder(order);
     }
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)

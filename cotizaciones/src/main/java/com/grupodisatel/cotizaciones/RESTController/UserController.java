@@ -2,6 +2,7 @@ package com.grupodisatel.cotizaciones.RESTController;
 
 import com.grupodisatel.cotizaciones.Dao.UserDAO;
 import com.grupodisatel.cotizaciones.Model.User;
+import com.grupodisatel.cotizaciones.Validation.UserRoleValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,20 @@ public class UserController {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private UserRoleValidation userRoleValidation;
+
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newUser(@RequestBody User user){
         return userDAO.newUser(user);
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public boolean deleteUser(@PathVariable int id){
-        return userDAO.deleteUser(id);
+    @DeleteMapping(value = "delete/{id}")
+    public boolean deleteUser(@PathVariable int id, @RequestHeader(value = "Authorization") String token){
+        if (userRoleValidation.validatePermission(token, 3)) {
+            return userDAO.deleteUser(id);
+        }
+        return false;
     }
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
@@ -46,7 +53,6 @@ public class UserController {
 
     @PatchMapping(value = "update/password/{id}")
     public boolean updatePasswordAdmin(@PathVariable int id, @RequestBody User password){
-        System.out.println(password);
         return userDAO.updatePasswordAdmin(id, password.getPassword());
     }
 

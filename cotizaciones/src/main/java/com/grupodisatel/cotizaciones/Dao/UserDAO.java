@@ -38,10 +38,10 @@ public class UserDAO {
         try{
             User user = entityManager.find(User.class, id);
             entityManager.remove(user);
+            return true;
         }catch (Exception e){
             return false;
         }
-            return false;
     }
 
     public String updateUser(int id, User user){
