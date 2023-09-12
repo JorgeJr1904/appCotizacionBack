@@ -42,16 +42,17 @@ create table usuario(
     constraint usuario_roles foreign key (idRol) references roles (idRol) on delete set null
 );
 
-create table cotizaciones(
+alter table cotizaciones(
     idCotizacion serial primary key,
-    idUsuario int not null,
+    idUsuario int,
     vNombreCliente varchar(30) not null,
     vApellidoCliente varchar(30) not null,
     vTipoCliente varchar(30) not null,
     dFechaCotizacion timestamp default current_timestamp not null,
     dPrecioTotal decimal(10,2) not null,
     cEstado char not null,
-    constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario)
+    constraint usuario_cotizacion foreign key (idUsuario) references usuario (idUsuario) on delete set null on update cascade
+    
 );
 
 create table pedido(
